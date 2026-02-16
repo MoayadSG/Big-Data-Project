@@ -1,72 +1,66 @@
-📌 Project Overview
-The objective of this project is to build a full data lake pipeline to ingest, clean, and analyze large-scale synthetic datasets of weather and traffic. The project uses a multi-layer architecture (Bronze, Silver, Gold) and applies advanced analytics like Monte Carlo Simulation and Factor Analysis.
+# 🚦 Urban Traffic Analytics Under Weather Conditions
+### Modern Data Lake & Predictive Analysis Pipeline (London Smart City Project)
 
-🛠 Technology Stack
-Language: Python (Pandas, Scikit-learn, Streamlit, Plotly).
+## 📌 Project Overview
+The goal of this project is to analyze how weather conditions (rain, temperature extremes, humidity, wind, and visibility) influence urban traffic behavior and congestion levels in **London**. We built a full predictive data lake pipeline to ingest, clean, and analyze large-scale synthetic datasets.
 
-Infrastructure: Docker & Docker Compose.
 
-Storage (Object Store): MinIO (S3-compatible).
 
-Distributed Storage: Hadoop HDFS.
+## 🏗 Data Lake Architecture
+The system follows a three-layer data lake architecture using **MinIO**, with an additional **HDFS** integration layer:
+* **Bronze Layer:** Raw synthetic data in CSV format.
+* **Silver Layer:** Cleaned and structured data in Parquet format.
+* **HDFS Layer:** Distributed storage for scalability.
+* **Gold Layer:** Final analytical results, simulations, and reports.
 
-Data Formats: CSV (Raw) and Parquet (Processed).
 
-🏗 Data Lake Architecture
-Bronze Layer: Raw data storage in MinIO (weather_raw.csv, traffic_raw.csv).
 
-Silver Layer: Cleaned and standardized data in Parquet format.
+## 🛠 Technology Stack
+| Category | Tools |
+| :--- | :--- |
+| **Infrastructure** | Docker, MinIO, HDFS |
+| **Programming** | Python (Pandas, Scikit-learn, FactorAnalyzer) |
+| **Data Formats** | CSV (Raw), Parquet (Processed) |
+| **Analysis** | Monte Carlo Simulation, Factor Analysis |
+| **Visualization** | Streamlit / Plotly |
 
-HDFS Layer: Distributed storage for scalability and big data processing.
+## 🚀 Project Phases
 
-Gold Layer: Final analytical datasets, daily aggregations, and joined tables for reporting.
+### Phase 1: Infrastructure & Ingestion (Bronze)
+* Containerized environment using **Docker Compose**.
+* Setup of MinIO buckets: `bronze`, `silver`, and `gold`.
+* Ingestion of raw `weather_raw.csv` and `traffic_raw.csv`.
 
-🚀 Project Phases
-1. Infrastructure & Ingestion
-Setting up MinIO using Docker.
+### Phase 2: Data Cleaning (Bronze → Silver)
+Handled messy real-world data issues:
+* **Weather:** Fixed IDs, parsed mixed date formats, and handled outliers (e.g., Temp -30°C to 60°C).
+* **Traffic:** Corrected negative speeds, capped extreme vehicle counts, and standardized congestion levels.
+* **Output:** All data converted to **Parquet** for high-performance reads.
 
-Creating buckets: bronze, silver, gold.
+### Phase 3: HDFS Integration
+Replicated the Silver layer data to a **Hadoop HDFS** cluster (NameNode & DataNode) to ensure distributed processing capabilities.
 
-Ingesting raw CSV files.
+### Phase 4: Dataset Merging
+Unified weather and traffic datasets via an **Inner Join** on `date_time` and `city` to create a master analytical table.
 
-2. Data Cleaning & Transformation
-Handling missing values (e.g., Imputing Rainfall with Median).
+### Phase 5: Monte Carlo Simulation
+Simulated 10,000+ scenarios to predict:
+* **Traffic Jam Probability:** Highest risk identified during "Low Visibility" (69%).
+* **Accident Risk:** "Heavy Rain" increased risk by 13% over the baseline.
 
-Outlier detection (Filtering extreme temperatures and speeds).
+### Phase 6: Factor Analysis
+Applied dimensionality reduction to identify 3 latent factors:
+1.  **Weather Severity:** (Rain, Wind, Visibility).
+2.  **Traffic Flow Stress:** (Vehicle Count, Speed).
+3.  **Accident Risk Factor:** (Accident Counts).
 
-Standardizing formats (Dates, Categories, and IDs).
+### Phase 7: Interactive Dashboard
+Developed a **Streamlit** dashboard to visualize:
+* Data Quality Metrics.
+* Scenario-based Risk Distributions.
+* Correlation Heatmaps.
 
-Converting datasets to Parquet for optimized storage.
-
-3. Advanced Analytics
-Monte Carlo Simulation: Predicting traffic congestion and accident risks under 7 different weather scenarios (Heavy Rain, Extreme Heat, etc.).
-
-Factor Analysis: Identifying latent factors like "Weather Severity" and "Traffic Flow Stress" using the FactorAnalyzer library.
-
-4. Interactive Dashboard
-A Streamlit web application was developed to visualize:
-
-Real-time statistics and scatter plots.
-
-Risk distribution for traffic congestion.
-
-Correlation heatmaps of weather impact.
-
-📊 Key Insights
-Low Visibility is the leading cause of traffic congestion (approx. 69% probability).
-
-Heavy Rain significantly increases accident risk (up to 60%).
-
-Extreme Heat surprisingly showed a lower accident risk compared to the baseline.
-
-⚙️ How to Run
-Clone the repository.
-
-Run docker-compose up -d to start MinIO and Hadoop.
-
-Execute the cleaning and transformation scripts in order.
-
-Run the dashboard using:
-
-Bash
-streamlit run dashboard/app.py
+## 📊 Key Insights & Recommendations
+* **Visibility** is the strongest driver of congestion; smart lighting is recommended.
+* **Heavy Rain** is the primary driver of accidents; adaptive speed limits should be enforced.
+* **Extreme Heat** correlates with lower traffic complexity.
